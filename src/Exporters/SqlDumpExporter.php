@@ -8,7 +8,7 @@ class SqlDumpExporter
 {
     public function handle(): string
     {
-        $db = config('database.connections.mysql');
+        $db   = config('database.connections.mysql');
         $path = config('flex-db-dump.path');
 
         // Ensure backup path exists
@@ -18,11 +18,14 @@ class SqlDumpExporter
 
         $file = $path . '/backup-' . now()->format('Ymd_His') . '.sql';
 
-        // Build the mysqldump command
+        // ✅ READ mysqldump path from config
+        $mysqldump = config('flex-db-dump.mysqldump_path', 'mysqldump');
+
         $command = [
-            'mysqldump',
+            $mysqldump,
             '--user=' . $db['username'],
             '--host=' . $db['host'],
+            '--port=' . ($db['port'] ?? 3306),
         ];
 
         // Add password only if it exists
@@ -30,16 +33,19 @@ class SqlDumpExporter
             $command[] = '--password=' . $db['password'];
         }
 
-        // Add the database name
+        // Database name
         $command[] = $db['database'];
 
         $process = new Process($command);
 
-        // Run the process and write output to file
-        $process->run(fn ($type, $buffer) => file_put_contents($file, $buffer, FILE_APPEND));
+        $process->run(function ($type, $buffer) use ($file) {
+            file_put_contents($file, $buffer, FILE_APPEND);
+        });
 
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException('mysqldump failed: ' . $process->getErrorOutput());
+            throw new \RuntimeException(
+                'mysqldump failed: ' . $process->getErrorOutput()
+            );
         }
 
         return $file;
