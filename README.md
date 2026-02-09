@@ -223,8 +223,8 @@ setsebool -P httpd_can_network_connect_db 1
 
 ```bash
   Route::middleware(['auth', 'role:admin', 'throttle:1,10'])->group(function () {
-  Route::get('/flex/db-dump', DbDumpController::class);
-  });
+  Route::get('flex/db-dump', [\Flex\DbDump\Http\Controllers\DbDumpController::class, 'download']);
+  })->name('flex_db_dump');
 ```
 
 ## Author
