@@ -15,16 +15,68 @@ Laravel database backup & download package with **mysqldump** or **PHP-only expo
      composer require daiyan_mozumder/flex-db-dump
 ```
 
-## Publish Config
-```bash
-     php artisan vendor:publish --tag=flex-db-dump-config
-```
-
 ## Configuration
 ```bash
      FLEX_DB_DUMP_MODE=php
 ```
+## Configuring mysqldump path
 
+flex-db-dump uses mysqldump to create database backups. By default, it tries to run mysqldump from the system PATH. Depending on your environment, you may need to explicitly set the path.
+
+## Step 1: Publish the config
+
+## Publish Config
+```bash
+     php artisan vendor:publish --tag=flex-db-dump-config
+```
+This will create:
+```bash
+     config/flex_db_dump.php
+```
+## Step 2: Update the mysqldump_path
+
+Open config/flex_db_dump.php:
+```bash
+     return [
+    // Backup storage path
+    'path' => storage_path('app/db_backups'),
+
+    // Full path to mysqldump executable
+    'mysqldump_path' => env('MYSQLDUMP_PATH', 'mysqldump'), // default
+];
+
+```
+## Step 3: Set environment variable in .env
+   1️⃣ Local development
+   
+Windows (XAMPP, WAMP):
+```bash
+     MYSQLDUMP_PATH="C:\\xampp\\mysql\\bin\\mysqldump.exe"
+```
+Linux/macOS:
+```bash
+     MYSQLDUMP_PATH="/usr/bin/mysqldump"
+```
+You can test the path in terminal:
+```bash
+     C:\xampp\mysql\bin\mysqldump.exe --version   # Windows
+     /usr/bin/mysqldump --version                  # Linux
+```
+## 2️⃣ VPS / Shared Hosting
+
+On VPS with shell access:
+```bash
+     MYSQLDUMP_PATH="/usr/bin/mysqldump"
+```
+## On shared hosting:
+1. Check if mysqldump is available:
+```bash
+     which mysqldump
+```
+2. Use the full path returned:
+```bash
+     MYSQLDUMP_PATH="/usr/local/mysql/bin/mysqldump"
+```
 ## Supported modes:
 
   php → No CLI, pure PHP
