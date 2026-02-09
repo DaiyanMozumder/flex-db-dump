@@ -12,7 +12,7 @@ Laravel database backup & download package with **mysqldump** or **PHP-only expo
 
 ## Installation
 ```bash
-     composer require flex/flex-db-dump
+     composer require daiyan_mozumder/flex-db-dump
 ```
 
 ## Publish Config
