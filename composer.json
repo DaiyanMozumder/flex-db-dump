@@ -1,0 +1,30 @@
+{
+  "name": "daiyan_mozumder/flex-db-dump",
+  "description": "Laravel database backup & download package with SQL dump or PHP-only exporter",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daiyan Mozumder",
+      "email": "daiyan1091@example.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "illuminate/support": "^10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Flex\\DbDump\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Flex\\DbDump\\FlexDbDumpServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
